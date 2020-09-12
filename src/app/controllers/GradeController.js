@@ -1,19 +1,53 @@
 import Grade from '../models/Grade';
 import Test from '../models/Test';
+import User from '../models/User';
 
 class GradeController {
   async index(req, res) {
     try {
-      const grades = await Grade.findAll({
-        attributes: ['uid', 'description', 'grade'],
-        include: [
-          {
-            model: Test,
-            as: 'test',
-            attributes: ['subject', 'description', 'user_uid'],
-          },
-        ],
-      });
+      let grades;
+      const { userType, userUid } = req;
+
+      if (userType === 2) {
+        grades = await Grade.findAll({
+          attributes: ['uid', 'description', 'grade'],
+          include: [
+            {
+              model: Test,
+              as: 'test',
+              attributes: ['uid', 'subject', 'description'],
+              include: [
+                {
+                  model: User,
+                  as: 'usernote',
+                  attributes: ['uid', 'name', 'email'],
+                },
+              ],
+            },
+          ],
+        });
+      }
+
+      if (userType === 1) {
+        grades = await Grade.findAll({
+          where: { uid: userUid },
+          attributes: ['uid', 'description', 'grade'],
+          include: [
+            {
+              model: Test,
+              as: 'test',
+              attributes: ['uid', 'subject', 'description'],
+              include: [
+                {
+                  model: User,
+                  as: 'usernote',
+                  attributes: ['uid', 'name', 'email'],
+                },
+              ],
+            },
+          ],
+        });
+      }
 
       return res.json({ grades });
     } catch (error) {
@@ -30,7 +64,14 @@ class GradeController {
           {
             model: Test,
             as: 'test',
-            attributes: ['subject', 'description', 'user_uid'],
+            attributes: ['uid', 'subject', 'description'],
+            include: [
+              {
+                model: User,
+                as: 'usernote',
+                attributes: ['uid', 'name', 'email'],
+              },
+            ],
           },
         ],
       });

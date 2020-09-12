@@ -61,7 +61,7 @@ class User extends Model {
 
   static associate(models) {
     this.hasMany(models.Test, {
-      as: 'test_user',
+      as: 'usernote',
       foreignKey: 'user_uid',
     });
   }

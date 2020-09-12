@@ -3,42 +3,11 @@ import User from '../models/User';
 import authConfig from '../../config/auth';
 
 class AuthController {
-  // async store(req, res) {
-  //   try {
-  //     const { email, password } = req.body;
-  //     const user = await User.findOne({ where: { email } });
-
-  //     if (!user) {
-  //       return res.status(401).json({ error: 'Usuário não encontrado' });
-  //     }
-
-  //     if (!(await user.checkPassword(password))) {
-  //       return res.status(401).json({ error: 'Senha Inválida' });
-  //     }
-
-  //     const { uid, name, phone } = user;
-
-  //     return res.json({
-  //       user: {
-  //         uid,
-  //         name,
-  //         email,
-  //         phone,
-  //       },
-  //       token: jwt.sign({ uid }, authConfig.secret, {
-  //         expiresIn: authConfig.expiresIn,
-  //       }),
-  //     });
-  //   } catch (error) {
-  //     return res.json({ error });
-  //   }
-  // }
-
   async store(req, res) {
     try {
-      const { email, password, type } = req.body;
+      const { email, password } = req.body;
       const user = await User.findOne({ where: { email } });
-      const { uid, name } = user;
+      const { uid, name, type } = user;
 
       if (!user) {
         return res.status(401).json({ error: 'Usuário não encontrado' });
@@ -48,34 +17,17 @@ class AuthController {
         return res.status(401).json({ error: 'Senha Inválida' });
       }
 
-      if (type === 2) {
-        return res.json({
-          user: {
-            uid,
-            name,
-            email,
-            type,
-          },
-          token: jwt.sign({ uid, type }, authConfig.secret, {
-            expiresIn: authConfig.expiresIn,
-          }),
-        });
-      }
-
-      if (type === 1) {
-        return res.json({
-          user: {
-            uid,
-            name,
-            email,
-            type,
-          },
-          token: jwt.sign({ uid, type }, authConfig.secret, {
-            expiresIn: authConfig.expiresIn,
-          }),
-        });
-      }
-      return res.json({ result: 'success' });
+      return res.json({
+        user: {
+          uid,
+          name,
+          email,
+          type,
+        },
+        token: jwt.sign({ uid, type }, authConfig.secret, {
+          expiresIn: authConfig.expiresIn,
+        }),
+      });
     } catch (error) {
       return res.json({ error });
     }

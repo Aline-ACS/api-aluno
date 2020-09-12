@@ -5,18 +5,24 @@ import Grade from '../models/Grade';
 class UserController {
   async index(req, res) {
     try {
-      const usersByType = await User.findAll({ where: { type } });
+      const users = await User.findAll({
+        attributes: ['name', 'email', 'type'],
+        include: [
+          {
+            model: Test,
+            as: 'tests',
+            attributes: ['subject', 'description'],
+            include: [
+              {
+                model: Grade,
+                as: 'grade',
+                attributes: ['uid', 'description', 'grade'],
+              },
+            ],
+          },
+        ],
+      });
 
-      if (usersByType === 2) {
-        const users = await User.findAll();
-        return res.json({ users });
-      }
-
-      if (usersByType !== 2) {
-        throw Error('acesso não permitido');
-      }
-
-      const users = await User.findAll();
       return res.json({ users });
     } catch (error) {
       return res.json({ error });
@@ -48,13 +54,13 @@ class UserController {
         include: [
           {
             model: Test,
-            as: 'test_user',
+            as: 'tests',
             attributes: ['subject', 'description'],
             include: [
               {
                 model: Grade,
                 as: 'grade',
-                attributes: ['uid', 'grade'],
+                attributes: ['uid', 'description', 'grade'],
               },
             ],
           },

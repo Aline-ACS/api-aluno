@@ -24,7 +24,7 @@ class TestController {
     try {
       const { uid } = req.params;
       const test = await Test.findByPk(uid, {
-        attributes: ['user_uid', 'test_uid', 'description', 'grade'],
+        attributes: ['uid', 'subject', 'description'],
         include: [
           {
             model: Grade,
