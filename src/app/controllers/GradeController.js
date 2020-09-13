@@ -20,7 +20,7 @@ class GradeController {
                 {
                   model: User,
                   as: 'usernote',
-                  attributes: ['uid', 'name', 'email'],
+                  attributes: ['uid', 'name', 'email', 'type'],
                 },
               ],
             },
@@ -41,7 +41,7 @@ class GradeController {
                 {
                   model: User,
                   as: 'usernote',
-                  attributes: ['uid', 'name', 'email'],
+                  attributes: ['uid', 'name', 'email', 'type'],
                 },
               ],
             },
