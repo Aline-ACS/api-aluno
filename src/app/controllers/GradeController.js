@@ -30,7 +30,7 @@ class GradeController {
 
       if (userType === 1) {
         grades = await Grade.findAll({
-          where: { uid: userUid },
+          where: { user_uid: userUid },
           attributes: ['uid', 'description', 'grade'],
           include: [
             {
